@@ -121,7 +121,7 @@ public class BookDetailBuilder {
 
     public String getListTitle(String org) {
         String result = "";
-        String[] orgarray = org.split("3");
+        String[] orgarray = org.split("_");
         result = orgarray[0].trim().replace("list", "");
         Pattern pattern = Pattern.compile("(.*?)lim(.*)");
         Matcher matcher = pattern.matcher(result);
@@ -220,7 +220,7 @@ public class BookDetailBuilder {
                     public void onClick(View v) {
                         String org = fieldtexttmp;
                         String result = "";
-                        String[] orgarray = org.split("3");
+                        String[] orgarray = org.split("_");
                         result = orgarray[0].trim().replace("list", "");
                         Pattern pattern = Pattern.compile("(.*?)lim(.*)");
                         Matcher matcher = pattern.matcher(result);
@@ -234,7 +234,7 @@ public class BookDetailBuilder {
                                 public void run() {
                                     String org = fieldtexttmp;
                                     String result = "";
-                                    String[] orgarray = org.split("3");
+                                    String[] orgarray = org.split("_");
 
                                     result = orgarray[0].trim().replace("list", "");
                                     Pattern pattern = Pattern.compile("(.*?)lim(.*)");
