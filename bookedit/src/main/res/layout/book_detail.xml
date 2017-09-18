@@ -18,17 +18,18 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ECECEC"
+                android:layout_height="50dp"
+                android:background="@color/titleblue"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
                 <ImageView
                     android:id="@+id/see"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="10"
+                    android:layout_width="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="30dp"
+                    android:padding="3dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/selector_see" />
 
@@ -37,15 +38,17 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="70"
-                    android:textColor="#000"
+                    android:textColor="#fff"
                     android:gravity="center"
+                    android:textSize="17sp"
                     android:maxLines="1" />
 
                 <ImageView
                     android:id="@+id/printer"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="10"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="30dp"
+                    android:padding="3dp"
+                    android:layout_height="30dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/selector_printer" />
 
@@ -90,24 +93,27 @@
 
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/pdfcontent"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ECECEC"
+                android:layout_height="50dp"
+                android:background="@color/titleblue"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
                 <ImageView
                     android:id="@+id/exitpdf"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="10"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="3dp"
+                    android:layout_gravity="center_vertical"
                     android:scaleType="fitCenter"
                     android:src="@drawable/selector_edit" />
 
@@ -117,21 +123,23 @@
                     android:layout_weight="70"
                     android:gravity="center"
                     android:maxLines="1" />
+
                 <ImageView
                     android:id="@+id/printer2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="10"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:padding="3dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/selector_printer" />
 
 
             </LinearLayout>
             <com.github.barteksc.pdfviewer.PDFView
-                android:id="@+id/pdfview"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
+            android:id="@+id/pdfview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
         </LinearLayout>
 
     </FrameLayout>
