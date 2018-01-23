@@ -11,13 +11,14 @@ import com.kymjs.common.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * 自适应的选择框Group
  */
 public class AutoCheckGroup extends LinearLayout {
 	private List<View> mchild = new ArrayList<View>();
 	private CheckedStateTracker mchildlisteener;
-	private OnCheckedChangeListener onCheckedChangeListener;
+	private com.shark.pdfedit.widget.OnCheckedChangeListener onCheckedChangeListener;
 	private boolean mProtectFromCheckedChange;
 	private int childid;
 	private int index=0;
@@ -70,6 +71,10 @@ public class AutoCheckGroup extends LinearLayout {
 	protected void onFinishInflate() {
 		// TODO Auto-generated method stub
 		super.onFinishInflate();
+		link();
+	}
+
+	public void link() {
 		List<View> tmp= ViewUtils.getAllChildViews(AutoCheckGroup.this);
 		mchild.clear();
 		int childcount = tmp.size();
@@ -83,17 +88,19 @@ public class AutoCheckGroup extends LinearLayout {
 			((AutoCheckBox)(mchild.get(index))).setChecked(true);
 		}
 	}
+
 	@Override
 	public void addView(View child) {
 		// TODO Auto-generated method stub
 		super.addView(child);
+
 	}
 	// private void init() {
 	// mChildOnCheckedChangeListener = new CheckedStateTracker();
 	// mPassThroughListener = new PassThroughHierarchyChangeListener();
 	// super.setOnHierarchyChangeListener(mPassThroughListener);
 	// }
-	class CheckedStateTracker implements OnWidgetCheckedChangeListener {
+	class CheckedStateTracker implements com.shark.pdfedit.widget.OnWidgetCheckedChangeListener {
 		@Override
 		public void onCheckedChanged(View buttonView, boolean isChecked) {
 			if (mProtectFromCheckedChange) {

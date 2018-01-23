@@ -51,11 +51,27 @@ public class BookDetailBuilder {
         this.detailMapData = detailMapData;
         this.content = content;
     }
+    public void put(String key, String value) {
+        viewmap.get(key).setText(value.trim());
+    }
 
     public Map<String, EditText> getViewmap() {
         return viewmap;
     }
+    public BookDetailBuilder initView() {
+        viewmap.clear();
+        content.removeAllViews();
+        for (int i = 0; i < getCount(); i++) {
+            View add = getView(i, content);
+            if (add != null) {
+                if (add.getVisibility() == View.VISIBLE) {
+                    content.addView(add);
+                }
 
+            }
+        }
+        return this;
+    }
     public Base_Entity getResult() {
         detailMapData.clear();
         for (int i = 0; i < detailMapData.size(); i++) {
@@ -164,6 +180,7 @@ public class BookDetailBuilder {
                     box.setClickable(false);
                 }
             }
+            autogroup.link();
             final EditText valueedit2 = ((EditText) convertView.findViewById(R.id.bookcontentValue));
             autogroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -176,7 +193,7 @@ public class BookDetailBuilder {
 
                 }
             });
-            autogroup.setCheck((detailMapData.getValue(position).equals(" ") || detailMapData.getValue(position).equals("")) ? 0 : Integer.parseInt(detailMapData.getValue(position)) - 1);
+            autogroup.setCheck(0);
             String sso = ((detailMapData.getValue(position).equals(" ") || detailMapData.getValue(position).equals("")) ? 1 : Integer.parseInt(detailMapData.getValue(position))) + "";
             valueedit2.setText(sso);
             viewmap.put(detailMapData.getField(position), valueedit2);
@@ -382,7 +399,7 @@ public class BookDetailBuilder {
         adapter.setEditState(true).build();
         AutoDialogBuilder builder = new AutoDialogBuilder(activity, dialogview,
                 new LinearLayout.LayoutParams((int) (BookStatic.getInstance().getScreenWidth() / 1.1), (int) (BookStatic.getInstance().getScreenHeight() / 1.5)));
-        builder.setPositiveButton(new View.OnClickListener() {
+        builder.setPositiveButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {

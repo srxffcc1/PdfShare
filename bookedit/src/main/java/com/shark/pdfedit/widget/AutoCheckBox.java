@@ -9,7 +9,7 @@ import android.widget.ImageView;
 /**
  * 自适应的选择框
  */
-public class AutoCheckBox extends ImageView implements Checkable,IAutoCheck{
+public class AutoCheckBox extends ImageView implements Checkable,IAutoCheck {
 	private OnCheckedChangeListener mOnCheckedChangeListener;
 	private OnWidgetCheckedChangeListener monWidgetCheckedChangeListener;
     private boolean mBroadcasting;
@@ -64,7 +64,6 @@ public class AutoCheckBox extends ImageView implements Checkable,IAutoCheck{
 		
 		mBroadcasting = true;
 		if(mOnCheckedChangeListener!=null){
-			
 			mOnCheckedChangeListener.onCheckedChanged(AutoCheckBox.this,mChecked);
 		}
 		if(monWidgetCheckedChangeListener !=null){
