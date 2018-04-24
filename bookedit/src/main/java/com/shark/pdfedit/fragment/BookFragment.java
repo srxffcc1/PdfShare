@@ -78,7 +78,7 @@ public class BookFragment extends Fragment implements View.OnClickListener{
     private int mtype;
     private String bookname;
     private BasePojo mbasepojo;
-    private Base_Entity mbasebok;
+    private Base_Entity mbasebook;
     private int mflag;
     private String mcookie;
     private BookDetailBuilder bookDetailBuilder;
@@ -248,7 +248,7 @@ public class BookFragment extends Fragment implements View.OnClickListener{
         mip= (String) initbundle.getSerializable("ip");
         mflag = (int) initbundle.getSerializable("flag");
         mbasepojo = (BasePojo) initbundle.getSerializable("webobject");
-        mbasebok = (Base_Entity) initbundle.getSerializable("bookentity");
+        mbasebook = (Base_Entity) initbundle.getSerializable("bookentity");
         mtype = (int) initbundle.getSerializable("type");
         mcookie = (String) initbundle.getSerializable("cookie");
         LinearLayout bookcontent = (LinearLayout) view.findViewById(R.id.bookcontent);
@@ -275,31 +275,31 @@ public class BookFragment extends Fragment implements View.OnClickListener{
         if(mtype==2){
             lastline.setVisibility(View.GONE);
         }
-        if (mbasebok == null) {
+        if (mbasebook == null) {
             try {
                 switch (mflag) {
                     case 0://2017
-                        mbasebok = ConvertPrint2017.getInstance().webobject2bookentity(mbasepojo);
-                        bookname= Static_BookLib.BOOKNAMELIST2017[Integer.parseInt(mbasebok.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
-                        bookaction=Static_BookLib.WEBBOOKNAME2017[Integer.parseInt(mbasebok.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
+                        mbasebook = ConvertPrint2017.getInstance().webobject2bookentity(mbasepojo);
+                        bookname= Static_BookLib.BOOKNAMELIST2017[Integer.parseInt(mbasebook.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
+                        bookaction=Static_BookLib.WEBBOOKNAME2017[Integer.parseInt(mbasebook.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
                         bookaction=Static_BookLib.changeHeadToLowCase(bookaction);
                         break;
                     case 1://2014
-                        mbasebok = ConvertPrint2014.getInstance().webobject2bookentity(mbasepojo);
-                        bookname=Static_BookLib.BOOKNAMELIST[Integer.parseInt(mbasebok.getClass().getSimpleName().replace("Entity_Book",""))];
-                        bookaction=Static_BookLib.WEBBOOKNAME[Integer.parseInt(mbasebok.getClass().getSimpleName().replace("Entity_Book",""))];
+                        mbasebook = ConvertPrint2014.getInstance().webobject2bookentity(mbasepojo);
+                        bookname=Static_BookLib.BOOKNAMELIST[Integer.parseInt(mbasebook.getClass().getSimpleName().replace("Entity_Book",""))];
+                        bookaction=Static_BookLib.WEBBOOKNAME[Integer.parseInt(mbasebook.getClass().getSimpleName().replace("Entity_Book",""))];
                         bookaction=Static_BookLib.changeHeadToLowCase(bookaction);
                         break;
                     case 2://昆明
-                        mbasebok = ConvertPrintkm.getInstance().webobject2bookentity(mbasepojo);
-                        bookname=Static_BookLib.BOOKNAMELIST[Integer.parseInt(mbasebok.getClass().getSimpleName().replace("Entity_Book",""))];
-                        bookaction=Static_BookLib.WEBBOOKNAME[Integer.parseInt(mbasebok.getClass().getSimpleName().replace("Entity_Book",""))];
+                        mbasebook = ConvertPrintkm.getInstance().webobject2bookentity(mbasepojo);
+                        bookname=Static_BookLib.BOOKNAMELIST[Integer.parseInt(mbasebook.getClass().getSimpleName().replace("Entity_Book",""))];
+                        bookaction=Static_BookLib.WEBBOOKNAME[Integer.parseInt(mbasebook.getClass().getSimpleName().replace("Entity_Book",""))];
                         bookaction=Static_BookLib.changeHeadToLowCase(bookaction);
                         break;
                     default:
-                        mbasebok = ConvertPrint2017.getInstance().webobject2bookentity(mbasepojo);
-                        bookname= Static_BookLib.BOOKNAMELIST2017[Integer.parseInt(mbasebok.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
-                        bookaction=Static_BookLib.WEBBOOKNAME2017[Integer.parseInt(mbasebok.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
+                        mbasebook = ConvertPrint2017.getInstance().webobject2bookentity(mbasepojo);
+                        bookname= Static_BookLib.BOOKNAMELIST2017[Integer.parseInt(mbasebook.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
+                        bookaction=Static_BookLib.WEBBOOKNAME2017[Integer.parseInt(mbasebook.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
                         bookaction=Static_BookLib.changeHeadToLowCase(bookaction);
                         break;
                 }
@@ -311,8 +311,8 @@ public class BookFragment extends Fragment implements View.OnClickListener{
                 e.printStackTrace();
             }
         }else{
-            bookname= Static_BookLib.BOOKNAMELIST2017[Integer.parseInt(mbasebok.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
-            bookaction=Static_BookLib.WEBBOOKNAME2017[Integer.parseInt(mbasebok.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
+            bookname= Static_BookLib.BOOKNAMELIST2017[Integer.parseInt(mbasebook.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
+            bookaction=Static_BookLib.WEBBOOKNAME2017[Integer.parseInt(mbasebook.getClass().getSimpleName().replace("Entity_Book_2017_",""))];
             bookaction=Static_BookLib.changeHeadToLowCase(bookaction);
         }
         switch (mtype){
@@ -334,7 +334,7 @@ public class BookFragment extends Fragment implements View.OnClickListener{
                 break;
         }
         title.setText(bookname);
-        bookDetailBuilder = new BookDetailBuilder(this.getActivity(), mbasebok, bookcontent,this);
+        bookDetailBuilder = new BookDetailBuilder(this.getActivity(), mbasebook, bookcontent,this);
         bookDetailBuilder.setEditState(mtype == 2 ? false : true);
         bookDetailBuilder.build();
         if(mtype==TYPE_SEE){
@@ -474,7 +474,7 @@ public class BookFragment extends Fragment implements View.OnClickListener{
     public void reviewNow(){
         Toast.makeText(this.getActivity(),"文书生成中",Toast.LENGTH_SHORT).show();
         pdfpath=Environment.getExternalStorageDirectory()+"/at.pdf";
-        Base_Entity booktmp=mbasebok;
+        Base_Entity booktmp= mbasebook;
         PdfFactory2017.create().setTimeout(1000).setTTFpath(Environment.getExternalStorageDirectory()+"/TTFS").setFileout(pdfpath).open().printerMaster(booktmp).close(new IPdfBack() {
             @Override
             public void writeError() {
@@ -621,6 +621,7 @@ public class BookFragment extends Fragment implements View.OnClickListener{
                 String key=bundle.getString("startkey");
                 String path=bundle.getString("bitmappath");
                 Bitmap bitmap=bundle.getParcelable("bitmap");
+                mbasebook.putexvalue(key,path);//把签名路劲附加给实体
                 bookDetailBuilder.setBitmap(key,path);
             }
         }
