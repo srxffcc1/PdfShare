@@ -185,7 +185,7 @@ public class BookDetailBuilder {
         return result;
     }
 
-    public View getView(int position, ViewGroup parent) {
+    public View getView(final int position, ViewGroup parent) {
         View convertView = null;
         final String fieldtext = getItem(position).toString();
         if (fieldtext.matches("check(.*)")) {
@@ -329,12 +329,12 @@ public class BookDetailBuilder {
             viewmap.put(detailMapData.getField(position), valueedit);
             valueedit.setText(detailMapData.getValue(position));
             ImageButton imageButton= (ImageButton) convertView.findViewById(R.id.signstart);
-            imagemapcopyed.put(fieldtext,valueedit);
-            imagemap.put(fieldtext,signimage);
+            imagemapcopyed.put(detailMapData.getField(position),valueedit);
+            imagemap.put(detailMapData.getField(position),signimage);
             imageButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bookFragment.startActivityForResult(new Intent(activity, SignAtureActivity.class).putExtra("startkey",fieldtext),1200);
+                    bookFragment.startActivityForResult(new Intent(activity, SignAtureActivity.class).putExtra("startkey",detailMapData.getField(position)),1200);
                 }
             });
         }else if(fieldtext.matches("(.*)情况(.*)")||fieldtext.matches("(.*)内容(.*)")){
