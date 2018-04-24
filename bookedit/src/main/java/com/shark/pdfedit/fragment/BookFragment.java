@@ -2,6 +2,8 @@ package com.shark.pdfedit.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import com.ay.framework.core.pojo.BasePojo;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.shark.pdfedit.R;
+import com.shark.pdfedit.activity.SignAtureActivity;
 import com.shark.pdfedit.adapter.BookDetailBuilder;
 import com.shark.pdfedit.statich.BookStatic;
 import com.shark.pdfedit.utils.HttpUrlConnectUtil;
@@ -331,7 +334,7 @@ public class BookFragment extends Fragment implements View.OnClickListener{
                 break;
         }
         title.setText(bookname);
-        bookDetailBuilder = new BookDetailBuilder(this.getActivity(), mbasebok, bookcontent);
+        bookDetailBuilder = new BookDetailBuilder(this.getActivity(), mbasebok, bookcontent,this);
         bookDetailBuilder.setEditState(mtype == 2 ? false : true);
         bookDetailBuilder.build();
         if(mtype==TYPE_SEE){
@@ -609,5 +612,17 @@ public class BookFragment extends Fragment implements View.OnClickListener{
         getActivity().finish();
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {//用来刷新签名
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1200&&resultCode== SignAtureActivity.RESULTOKS){
+            if(data!=null){
+                Bundle bundle=data.getBundleExtra("bitmapbundle");
+                String key=bundle.getString("startkey");
+                String path=bundle.getString("bitmappath");
+                Bitmap bitmap=bundle.getParcelable("bitmap");
+                bookDetailBuilder.setBitmap(key,path);
+            }
+        }
+    }
 }

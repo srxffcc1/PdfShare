@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.shark.pdfedit.R;
+import com.shark.pdfedit.statich.BookStatic;
 import com.shark.pdfedit.utils.TextColorUtil;
 import com.wisdomregulation.data.entitybase.Base_Entity;
 
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BookTipBuilder {
-	private Activity context;
+	private Activity activity;
 	private List<Base_Entity> detailMapData;
 	private LinearLayout content;
 
@@ -27,7 +28,7 @@ public class BookTipBuilder {
 	public BookTipBuilder(Activity context,
                           List<Base_Entity> detailMapData, LinearLayout content) {
 		super();
-		this.context = context;
+		this.activity = context;
 		this.detailMapData = detailMapData;
 		this.content = content;
 	}
@@ -41,6 +42,7 @@ public class BookTipBuilder {
 			if(add!=null){
 				if(add.getVisibility()==View.VISIBLE){
 					content.addView(add);
+					content.addView(getSpace(activity));
 				}
 				
 			}
@@ -93,11 +95,17 @@ public class BookTipBuilder {
 		return position;
 	}
 	public View getView(int position, ViewGroup parent) {
-		View view= LayoutInflater.from(context).inflate(R.layout.item_book_tipcontent,null);
+		View view= LayoutInflater.from(activity).inflate(R.layout.item_book_tipcontent,null);
 		LinearLayout linearLayout= (LinearLayout) view.findViewById(R.id.veraddtip);
-		BookTipDetailBuilder adapter_bookDetail=new BookTipDetailBuilder(context,detailMapData.get(position), linearLayout).build();
+		BookTipDetailBuilder adapter_bookDetail=new BookTipDetailBuilder(activity,detailMapData.get(position), linearLayout).build();
 		TextColorUtil.fixTextColor(view);
 		return view;
 	}
-
+	public static View getSpace(final Activity activity){
+		View convertView = null;
+		convertView = LayoutInflater.from(activity).inflate(R.layout.item_book_content_space, null);
+		LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (BookStatic.getInstance().getScreenHeight() /BookStatic.space));
+		convertView.setLayoutParams(layoutParams);
+		return convertView;
+	}
 }

@@ -2,6 +2,9 @@ package com.shark.pdfedit.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +14,20 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shark.pdfedit.R;
+import com.shark.pdfedit.activity.SignAtureActivity;
+import com.shark.pdfedit.fragment.BookFragment;
 import com.shark.pdfedit.statich.BookStatic;
 import com.shark.pdfedit.utils.CallBack;
 import com.shark.pdfedit.utils.DateTimePickDialog;
 import com.shark.pdfedit.utils.TextColorUtil;
+import com.shark.pdfedit.utils.VoiceUtil;
 import com.shark.pdfedit.widget.AutoCheckBox;
 import com.shark.pdfedit.widget.AutoCheckGroup;
 import com.shark.pdfedit.widget.AutoDialogBuilder;
@@ -28,6 +36,7 @@ import com.shark.pdfedit.widget.PassLinearLayout;
 import com.wisdomregulation.data.entitybase.Base_Entity;
 import com.wisdomregulation.data.entitydemo.Entity_Demo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,20 +45,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BookDetailBuilder {
-    private Activity context;
+    private Activity activity;
     private Base_Entity detailMapData;
     private LinearLayout content;
-
+    private BookFragment bookFragment;
     private boolean editState;
     private boolean isshow = true;
     private Map<String, EditText> viewmap = new HashMap<String, EditText>();
+    private Map<String, ImageView> imagemap = new HashMap<String, ImageView>();
+    private Map<String, EditText> imagemapcopyed = new HashMap<String, EditText>();
 
     public BookDetailBuilder(Activity context,
-                             Base_Entity detailMapData, LinearLayout content) {
+                             Base_Entity detailMapData, LinearLayout content, BookFragment fragment) {
         super();
-        this.context = context;
+        this.activity = context;
         this.detailMapData = detailMapData;
         this.content = content;
+        this.bookFragment=fragment;
     }
     public void put(String key, String value) {
         viewmap.get(key).setText(value.trim());
@@ -72,6 +84,30 @@ public class BookDetailBuilder {
         }
         return this;
     }
+    public void setBitmap(String key, Bitmap bitmap){
+//        Uri uri = Uri.fromFile(new File(bitmappath));
+        ImageView imageView=imagemap.get(key);
+        if(imageView!=null){
+            imageView.setImageBitmap(bitmap);
+            imageView.setVisibility(View.VISIBLE);
+            TextView textView=imagemapcopyed.get(key);
+            if(textView!=null){
+                textView.setVisibility(View.GONE);
+            }
+        }
+    }
+    public void setBitmap(String key, String bitmappath){
+        Uri uri = Uri.fromFile(new File(bitmappath));
+        ImageView imageView=imagemap.get(key);
+        if(imageView!=null){
+            imageView.setImageURI(uri);
+            imageView.setVisibility(View.VISIBLE);
+            TextView textView=imagemapcopyed.get(key);
+            if(textView!=null){
+                textView.setVisibility(View.GONE);
+            }
+        }
+    }
     public Base_Entity getResult() {
         detailMapData.clear();
         for (int i = 0; i < detailMapData.size(); i++) {
@@ -91,7 +127,7 @@ public class BookDetailBuilder {
         (viewmap.get(detailMapData.getField(position))).setFocusable(true);
         (viewmap.get(detailMapData.getField(position))).setFocusableInTouchMode(true);
         (viewmap.get(detailMapData.getField(position))).requestFocus();
-        ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE))
+        ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE))
                 .toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
         return this;
     }
@@ -104,6 +140,7 @@ public class BookDetailBuilder {
             if (add != null) {
                 if (add.getVisibility() == View.VISIBLE) {
                     content.addView(add);
+                    content.addView(getSpace(activity));
                 }
 
             }
@@ -150,21 +187,21 @@ public class BookDetailBuilder {
 
     public View getView(int position, ViewGroup parent) {
         View convertView = null;
-        String fieldtext = getItem(position).toString();
+        final String fieldtext = getItem(position).toString();
         if (fieldtext.matches("check(.*)")) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_book_check, null);
+            convertView = LayoutInflater.from(activity).inflate(R.layout.item_book_check, null);
             final AutoCheckGroup autogroup = (AutoCheckGroup) convertView.findViewById(R.id.checkGroup);
             String[] fieldtexts = fieldtext.replace("check", "").split("2");
             for (int i = 0; i < fieldtexts.length; i++) {
-                PassLinearLayout passparent = new PassLinearLayout(context);
+                PassLinearLayout passparent = new PassLinearLayout(activity);
                 passparent.setOrientation(LinearLayout.HORIZONTAL);
                 passparent.setPadding(0, 15, 0, 15);
                 passparent.setClickable(true);
                 passparent.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-                TextView text = new TextView(context);
+                TextView text = new TextView(activity);
                 text.setLayoutParams(new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1));
                 text.setText(fieldtexts[i].toString().trim());
-                AutoCheckBox box = new AutoCheckBox(context);
+                AutoCheckBox box = new AutoCheckBox(activity);
                 box.setPadding(0, 0, 7, 0);
                 box.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
                 box.setImageResource(R.drawable.toggle);
@@ -198,7 +235,7 @@ public class BookDetailBuilder {
             valueedit2.setText(sso);
             viewmap.put(detailMapData.getField(position), valueedit2);
         } else if (fieldtext.matches("list(.*)")) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_book_tip, null);
+            convertView = LayoutInflater.from(activity).inflate(R.layout.item_book_tip, null);
             String titiletextstring = getListTitle(fieldtext);
             final String fieldtexttmp = fieldtext;
             final TextView listtitle = (TextView) convertView.findViewById(R.id.listtitle);
@@ -209,7 +246,7 @@ public class BookDetailBuilder {
             String tmpvalue = detailMapData.getValue(position);
             String tmpfield = fieldtext;
             List<Base_Entity> addlist = string2EntityList(tmpfield, tmpvalue);
-            final BookTipBuilder adapter_bookAddItem = new BookTipBuilder(context, addlist, listcontent);
+            final BookTipBuilder adapter_bookAddItem = new BookTipBuilder(activity, addlist, listcontent);
             adapter_bookAddItem.build();
             final EditText valueedit2 = ((EditText) convertView.findViewById(R.id.bookcontentValue));
             showhide.setOnClickListener(new OnClickListener() {
@@ -246,7 +283,7 @@ public class BookDetailBuilder {
                             limit = Integer.parseInt(matcher.group(2));
                         }
                         if (adapter_bookAddItem.getCount() > limit) {
-                            context.runOnUiThread(new Runnable() {
+                            activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     String org = fieldtexttmp;
@@ -260,12 +297,12 @@ public class BookDetailBuilder {
                                     if (matcher.find()) {
                                         limit = Integer.parseInt(matcher.group(2));
                                     }
-                                    Toast.makeText(context, "超过" + limit + "个不可继续添加", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(activity, "超过" + limit + "个不可继续添加", Toast.LENGTH_SHORT).show();
                                 }
                             });
 
                         } else {
-                            showDialog_AddBookItem(context, fieldtexttmp, new CallBack() {
+                            showDialog_AddBookItem(activity, bookFragment,fieldtexttmp, new CallBack() {
                                 @Override
                                 public void back(Object resultlist) {
                                     final Base_Entity result = (Base_Entity) resultlist;
@@ -284,8 +321,37 @@ public class BookDetailBuilder {
             final EditText valueedit = ((EditText) convertView.findViewById(R.id.bookcontentValue));
             viewmap.put(detailMapData.getField(position), valueedit);
             valueedit.setText(detailMapData.getValue(position));
-        } else {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_book_content, null);
+        } else if(fieldtext.matches("(.*)签名(.*)")||fieldtext.matches("(.*)签字(.*)")){
+            convertView = LayoutInflater.from(activity).inflate(R.layout.item_book_content_sign, null);
+            ((TextView) convertView.findViewById(R.id.bookcontentName)).setText(fieldtext);
+            final EditText valueedit = ((EditText) convertView.findViewById(R.id.bookcontentValue));
+            final ImageView signimage= (ImageView) convertView.findViewById(R.id.signimage);
+            viewmap.put(detailMapData.getField(position), valueedit);
+            valueedit.setText(detailMapData.getValue(position));
+            ImageButton imageButton= (ImageButton) convertView.findViewById(R.id.signstart);
+            imagemapcopyed.put(fieldtext,valueedit);
+            imagemap.put(fieldtext,signimage);
+            imageButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bookFragment.startActivityForResult(new Intent(activity, SignAtureActivity.class).putExtra("startkey",fieldtext),1200);
+                }
+            });
+        }else if(fieldtext.matches("(.*)情况(.*)")||fieldtext.matches("(.*)内容(.*)")){
+            convertView = LayoutInflater.from(activity).inflate(R.layout.item_book_content_voice, null);
+            ((TextView) convertView.findViewById(R.id.bookcontentName)).setText(fieldtext);
+            final EditText valueedit = ((EditText) convertView.findViewById(R.id.bookcontentValue));
+            viewmap.put(detailMapData.getField(position), valueedit);
+            valueedit.setText(detailMapData.getValue(position));
+            ImageButton imageButton= (ImageButton) convertView.findViewById(R.id.voicestart);
+            imageButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    VoiceUtil.startVoiceDialog(activity,valueedit);
+                }
+            });
+        }else {
+            convertView = LayoutInflater.from(activity).inflate(R.layout.item_book_content, null);
             ((TextView) convertView.findViewById(R.id.bookcontentName)).setText(fieldtext);
             final EditText valueedit = ((EditText) convertView.findViewById(R.id.bookcontentValue));
             viewmap.put(detailMapData.getField(position), valueedit);
@@ -300,7 +366,7 @@ public class BookDetailBuilder {
 
                 @Override
                 public void onClick(View v) {
-                    new DateTimePickDialog(context, "").show(valueedit);
+                    new DateTimePickDialog(activity, "").show(valueedit);
 
                 }
             });
@@ -319,6 +385,8 @@ public class BookDetailBuilder {
             valueedit.setClickable(false);
             valueedit.setKeyListener(null);
         }
+        LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        convertView.setLayoutParams(layoutParams);
         TextColorUtil.fixTextColor(convertView);
         return convertView;
     }
@@ -373,7 +441,7 @@ public class BookDetailBuilder {
         return itementity;
     }
 
-    public static View showDialog_AddBookItem(final Activity activity, Object entity, final CallBack back) {
+    public static View showDialog_AddBookItem(final Activity activity, BookFragment bookFragment,Object entity, final CallBack back) {
         LinearLayout dialogview = (LinearLayout) activity
                 .getLayoutInflater().inflate(R.layout.dialog_add_item, null);
 //        Util_MatchTip.initAllScreenText(dialogview);
@@ -395,7 +463,7 @@ public class BookDetailBuilder {
         for (int i = 0; i < orgarray2.length; i++) {
             itementity.add(orgarray2[i].trim(), "");
         }
-        final BookDetailBuilder adapter = new BookDetailBuilder(activity, itementity, itemcontent);
+        final BookDetailBuilder adapter = new BookDetailBuilder(activity, itementity, itemcontent,bookFragment);
         adapter.setEditState(true).build();
         AutoDialogBuilder builder = new AutoDialogBuilder(activity, dialogview,
                 new LinearLayout.LayoutParams((int) (BookStatic.getInstance().getScreenWidth() / 1.1), (int) (BookStatic.getInstance().getScreenHeight() / 1.5)));
@@ -410,6 +478,13 @@ public class BookDetailBuilder {
         }).setNegativeButton(null);
         builder.show();
         return dialogview;
+    }
+    public static View getSpace(final Activity activity){
+        View convertView = null;
+        convertView = LayoutInflater.from(activity).inflate(R.layout.item_book_content_space, null);
+        LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int) (BookStatic.getInstance().getScreenHeight() /BookStatic.space));
+        convertView.setLayoutParams(layoutParams);
+        return convertView;
     }
 
 }

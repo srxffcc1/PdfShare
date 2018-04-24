@@ -5,6 +5,9 @@ import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
+
 /**
  * Created by King6rf on 2017/8/20.
  */
@@ -13,6 +16,7 @@ public class BookStatic {
     private int px;
     private int py;
     private Context mcontext;
+    public static final int space=100;
     private static final BookStatic instance=new BookStatic();
     public static BookStatic getInstance(){
         return instance;
@@ -31,6 +35,7 @@ public class BookStatic {
 //		double screenInches = Math.sqrt(x + y);
         px = point.x;
         py = point.y;
+        SpeechUtility.createUtility(context, SpeechConstant.APPID+"=598814b7");
     }
     public double getScreenWidth() {
         return px;

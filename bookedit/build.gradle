@@ -21,7 +21,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters  'armeabi-v7a'//,'x86', 'x86_64', 'arm64-v8a','armeabi',armeabi-v7a
+        }
     }
     buildTypes {
         release {
@@ -38,10 +41,15 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.github.barteksc:android-pdf-viewer:2.7.0-beta.1'
-    compile 'com.sixdown.helppdf:helppdf:1.1.4'
+    compile ('com.sixdown.helppdf:helppdf:1.6.7'){
+        exclude  module: 'bookentity'
+    }
+    compile 'com.sixdown.bookentity:bookentity:1.4.4'
     compile 'com.sixdown.common:common:1.0.1'
     //通用工具集
     compile 'com.android.support:appcompat-v7:21+'
+    compile 'com.sixdown.signature-pad:signature-pad:1.0.0'
+    compile 'com.sixdown.voicerecog:voicerecog:1.0.1'
 }
 publish {
     userOrg = 'aykjydz'//bintray网的用户id

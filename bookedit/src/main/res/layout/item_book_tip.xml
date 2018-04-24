@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#FFFFFF"
     android:orientation="vertical" >
 
@@ -13,7 +13,7 @@
         <TextView
             android:id="@+id/listtitle"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:padding="10dp" />
@@ -21,7 +21,7 @@
         <Button
             android:id="@+id/addtip"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="添加" />
     </LinearLayout>
     <TextView
@@ -44,7 +44,7 @@
         <TextView
             android:id="@+id/hidetip"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="5dp"
             android:gravity="center"
@@ -55,14 +55,14 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="gone" >
 
         <EditText
             android:id="@+id/bookcontentValue"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="300"
             android:gravity="center_vertical"
             android:hint="未填写"
@@ -72,7 +72,7 @@
         <TextView
             android:id="@+id/bookcontentName"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="200"
             android:gravity="center_vertical"
             android:visibility="gone" />
