@@ -1,4 +1,4 @@
-//include ':bookedit'
+include ':bookedit'
 include ':app'
 
 

@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.shark.pdfedit.R;
 import com.shark.pdfedit.activity.SignAtureActivity;
-import com.shark.pdfedit.fragment.BookFragment;
 import com.shark.pdfedit.statich.BookStatic;
 import com.shark.pdfedit.utils.CallBack;
 import com.shark.pdfedit.utils.DateTimePickDialog;
