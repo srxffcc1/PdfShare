@@ -36,7 +36,7 @@ public class AutoDialogBuilder {
 
 	public Dialog show(){
 
-		dialog=new Dialog(context, R.style.Theme_Transparent);
+		dialog=new Dialog(context, R.style.Book_Theme_Transparent);
 		dialog.setContentView(view, params);
 		Window window = dialog.getWindow();
 		// 设置显示动画
@@ -69,7 +69,7 @@ public class AutoDialogBuilder {
 		return dialog;
 	}
 	public Dialog getdialog(){
-		dialog=new Dialog(context, R.style.Theme_Transparent);
+		dialog=new Dialog(context, R.style.Book_Theme_Transparent);
 		dialog.setContentView(view, params);
 		Window window = dialog.getWindow();
 		// 设置显示动画

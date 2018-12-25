@@ -13,11 +13,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Util_Apk {
-
 	/**
 	 * 判断app是否安装
 	 * @param context
@@ -30,21 +30,45 @@ public class Util_Apk {
 			return true;
 		} catch (Exception e) {
 			return false;
+
 		}
+	}
+
+	public static int getAssetsApkLevel(Context context){
+		int result=0;
+		try {
+			String[] alllist = context.getAssets().list("");
+			for (int i = 0; i < alllist.length; i++) {
+				if (alllist[i].startsWith("PrinterShare_Crack")) {
+					String resultstring=alllist[i];
+					Pattern pattern=Pattern.compile(".*?(\\d+).+");
+					Matcher matcher=pattern.matcher(resultstring);
+					if(matcher.find()){
+						result=Integer.parseInt(matcher.group(1));
+					}
+					System.gc();// gc
+					System.runFinalization();// gc
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 
 
 	/**
-	 * 判断app是否安装 且为13版本
+	 * 判断app是否安装
 	 * @param context
 	 * @param pageName
 	 * @return
 	 */
-	public static boolean appIsInstalled13(Context context, String pageName) {
+	public static boolean appIsInstalledWe(Context context, String pageName) {
 		try {
 			int packagelevel=context.getPackageManager().getPackageInfo(pageName, 0).versionCode;
-			if(packagelevel==13){
+			if(packagelevel==getAssetsApkLevel(context)){
 				return true;
 			}else{
 
@@ -71,10 +95,10 @@ public class Util_Apk {
 	 * @param pageName
 	 * @param apkname
 	 */
-	public static void appInstall13(Activity activity,String pageName,String apkname) {
+	public static void appInstallWe(Activity activity, String pageName, String apkname) {
 		try {
 			int packagelevel=activity.getPackageManager().getPackageInfo(pageName, 0).versionCode;
-			if(packagelevel==13){
+			if(packagelevel==getAssetsApkLevel(activity)){
 
 			}else{
 				unstallApp(activity,pageName);
@@ -118,12 +142,27 @@ public class Util_Apk {
 	 */
 	private static File getAssetFileToCacheDir(Context context, String fileName) {
 		try {
-			if(new File(Environment.getExternalStorageDirectory()+"/ZhiApk/PrinterShare_Crack").exists()){
+			if(false){
 				return new File(Environment.getExternalStorageDirectory()+"/ZhiApk/PrinterShare_Crack");
 			}else{			File cacheDir = getCacheDir(context);
 			final String cachePath = cacheDir.getAbsolutePath()
 					+ File.separator + fileName;
-			InputStream is = context.getAssets().open(fileName);
+			String[] alllist = context.getAssets().list("");
+				for (int i = 0; i < alllist.length; i++) {
+					if (alllist[i].startsWith("PrinterShare_Crack")) {
+						String resultstring=alllist[i];
+						Pattern pattern=Pattern.compile(".*?(\\d+).+");
+						Matcher matcher=pattern.matcher(resultstring);
+						if(matcher.find()){
+							fileName=matcher.group();
+						}
+						System.gc();// gc
+						System.runFinalization();// gc
+					}
+				}
+
+				InputStream is = context.getAssets().open(fileName);
+
 			File file = new File(cachePath);
 			file.createNewFile();
 			FileOutputStream fos = new FileOutputStream(file);

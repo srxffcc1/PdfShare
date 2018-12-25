@@ -349,7 +349,13 @@ public class BookFragment extends Fragment implements View.OnClickListener{
         Toast.makeText(getActivity(),"文书生成中",Toast.LENGTH_SHORT).show();
         pdfpath=Environment.getExternalStorageDirectory()+"/at.pdf";
         Base_Entity booktmp=bookDetailBuilder.getResult();
-        PdfFactory2017.create().setTimeout(1000).setTTFpath(Environment.getExternalStorageDirectory()+"/TTFS").setFileout(pdfpath).open().printerMaster(booktmp).close(new IPdfBack() {
+        PdfFactory2017.create().setTimeout(1000).setTTFpath(Environment.getExternalStorageDirectory()+"/TTFS").setFileout(pdfpath).open().printerMaster(booktmp)
+
+
+
+
+
+                .close(new IPdfBack() {
             @Override
             public void writeError() {
                 Toast.makeText(getActivity(),"操作过快请等待1秒",Toast.LENGTH_SHORT).show();

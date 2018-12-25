@@ -1,5 +1,7 @@
 package com.shark.pdfedit.utils;
 
+import android.util.Log;
+
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -125,6 +127,8 @@ public class HttpUrlConnectUtil {
             return "";
         } else {
             for (String key : paramMap.keySet()) {
+                Log.v("Connect","key:"+key);
+                Log.v("Connect","value:"+paramMap.get(key));
                 if (paramMap.get(key) != null) {
                     String value = (String) paramMap.get(key);
                     if (sb.length() < 1) {
@@ -157,7 +161,7 @@ public class HttpUrlConnectUtil {
             conn.setRequestProperty("Cookie", "JSESSIONID=" + cookie);
 
         }
-        conn.setRequestMethod(SERVLET_POST);
+        conn.setRequestMethod(SERVLET_GET);
 
         String paramStr = prepareParam(paramMap);
         conn.setDoInput(true);

@@ -5,6 +5,7 @@ android {
     buildToolsVersion "25.0.3"
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.example.app"
         minSdkVersion 18
         targetSdkVersion 22
@@ -27,6 +28,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
