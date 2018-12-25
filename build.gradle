@@ -3,12 +3,12 @@
 buildscript {
     repositories {
         jcenter()
-        mavenLocal()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
-        classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
-        classpath 'com.novoda:bintray-release:0.4.0'
+        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath ('com.jakewharton:butterknife-gradle-plugin:8.5.1')
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -17,7 +17,19 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        mavenLocal()
+        google()
+        maven {
+            url "https://jitpack.io"
+        }
+        maven {
+            url "http://dl.bintray.com/lukaville/maven"
+        }
+        maven {
+            url "http://mvn.gt.igexin.com/nexus/content/repositories/releases/"
+        }
+        maven {
+            url "https://dl.bintray.com/drummer-aidan/maven"
+        }
     }
 }
 ext {
